@@ -14,7 +14,12 @@ public class ClienteImplementacion implements ClienteInterfaz {
         System.out.print("Ingrese el nombre completo del cliente: ");
         String nombreCompleto = sc.nextLine();
         
-        String dniClienteString = "";
+        // Solicitar y validar el DNI
+        String dniClienteString = solicitarDni();
+        if (dniClienteString == null) {
+            System.out.println("No se ha podido dar de alta al cliente. DNI inválido.");
+            return; // Salir del método si el DNI no es válido
+        }
 
         // Separar nombre y apellido
         String[] partesNombre = nombreCompleto.split(" ", 3);
@@ -22,30 +27,17 @@ public class ClienteImplementacion implements ClienteInterfaz {
         String apellido1 = (partesNombre.length > 1) ? partesNombre[1] : "";
         String apellido2 = (partesNombre.length > 2) ? partesNombre[2] : "";
 
-       
         ClienteDto nuevoCliente = new ClienteDto();
         nuevoCliente.setIdCliente(generarNuevoId());
         nuevoCliente.setNombreCliente(nombre);
         nuevoCliente.setApellido1Cliente(apellido1);
         nuevoCliente.setApellido2Cliente(apellido2);
         nuevoCliente.setDniCliente(dniClienteString);
+        nuevoCliente.setEsValidado(false);
 
-       if (esDniValido(dniClienteString)) {
-    	   listaClientes.add(nuevoCliente);
-
-           mostrarDatosCliente(nombre, apellido1, apellido2);
-		
-	} else {
-		System.out.println("DNI inválido");
-	}
-        
-        
-       
-        					 
+        listaClientes.add(nuevoCliente);
     }
 
-	
-	
 	private long generarNuevoId() {
         if (listaClientes.isEmpty()) {
             return 1;
@@ -61,20 +53,17 @@ public class ClienteImplementacion implements ClienteInterfaz {
      */
     public String solicitarDni() {
         int intentos = 0;
-        
 
-        if (intentos== 0) {
+        if (intentos == 0) {
             System.out.print("Ingrese el DNI (8 dígitos + 1 letra): ");
-             String dniClienteString = sc.nextLine();
+            String dniClienteString = sc.nextLine();
 
             if (esDniValido(dniClienteString)) {
-            	
-            	
+            	System.out.println("Cliente Creado");
                 return dniClienteString;
-            } 
-        } else {
-        	
-        	System.out.println("DNI inválido");
+            } else {
+                System.out.println("DNI inválido");
+            }
         }
         return null;
     }
@@ -85,14 +74,13 @@ public class ClienteImplementacion implements ClienteInterfaz {
      *	@author jmormez
      *	@date 17/02/2025
      */
-    public boolean esDniValido(String dniClienteString) {
+    private boolean esDniValido(String dniClienteString) {
         
         if (dniClienteString.matches("\\d{8}[A-Z]")) {
          
             String numeros = dniClienteString.substring(0, 8);
             char letra = dniClienteString.charAt(8);
 
-            
             int numero = Integer.parseInt(numeros);
             char letraCorrecta = calcularLetraDNI(numero);
             return letra == letraCorrecta;
@@ -115,27 +103,4 @@ public class ClienteImplementacion implements ClienteInterfaz {
         int indice = numero % 23;
         return letras[indice];
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public void mostrarDatosCliente(String nombre, String apellido1, String apellido2) {
-		System.out.println("DNI:" + " "+ solicitarDni() + "\n" +
-        					"ID:"+ generarNuevoId() + "\n" + 
-        					"NOMBRE"+" " + apellido1 +"," + apellido2 +"," +  nombre + "\n" +
-        					"ESTADO DE VALIDACION:" +  "en progreso" + "\n" +
-        					 "%%%%%%%%%%");
-	}
-	
-	
 }
