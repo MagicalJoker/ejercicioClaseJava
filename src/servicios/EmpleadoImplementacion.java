@@ -1,18 +1,49 @@
 package servicios;
 
-public class EmpleadoImplementacion implements EmpleadoInterfaz {
+import java.util.List;
+import java.util.Scanner;
 
-	
-	public void validarCLiente() {
-		 
-				System.out.println("DNI:" + " "+ dni + "\n" +
-		        					"ID:"+ generarNuevoId() + "\n" + 
-		        					"NOMBRE"+" " + apellido1 +"," + apellido2 +"," +  nombre + "\n" +
-		        					"ESTADO DE VALIDACION:" + esValidado + "\n" +
-		        					 "%%%%%%%%%%");
-		
-		
-	}
-	
+import dtos.ClienteDto;
+
+public class EmpleadoImplementacion implements EmpleadoInterfaz {
+    Scanner sc = new Scanner(System.in);
+    
+    public void validarCliente() {
+        List<ClienteDto> listaClientes = ClienteImplementacion.listaClientes;
+
+        // Mostrar todos los clientes que no están validados
+        System.out.println("Clientes no validados:");
+        for (ClienteDto cliente : listaClientes) {
+            if (!cliente.isEsValidado()) {
+                System.out.println("DNI: " + cliente.getDniCliente() + "\n" +
+                                   "ID: " + cliente.getIdCliente() + "\n" + 
+                                   "NOMBRE: " + cliente.getApellido1Cliente() + ", " + cliente.getApellido2Cliente() + ", " + cliente.getNombreCliente() + "\n" +
+                                   "ESTADO DE VALIDACION: " + cliente.isEsValidado() + "\n" +
+                                   "%%%%%%%%%%");
+            }
+        }
+
+        // Solicitar el DNI del cliente a validar
+        System.out.print("Ingrese el DNI del cliente que desea validar: ");
+        String dni = sc.nextLine();
+
+        // Buscar el cliente en la lista y validar
+        boolean clienteEncontrado = false;
+        for (ClienteDto cliente : listaClientes) {
+            if (cliente.getDniCliente().equals(dni)) {
+                cliente.setEsValidado(true);
+                clienteEncontrado = true;
+                System.out.println("El cliente con DNI " + dni + " ha sido validado.");
+                break;
+            }
+        }
+
+        if (!clienteEncontrado) {
+            System.out.println("No se encontró un cliente con el DNI proporcionado.");
+        }
+
+        // Volver al menú principal (esto puede variar según cómo esté implementado el menú principal)
+        // mostrarMenuPrincipal();
+    }
 
 }

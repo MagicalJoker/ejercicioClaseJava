@@ -2,6 +2,6 @@ package servicios;
 
 public interface EmpleadoInterfaz {
 	
-	public void validarCLiente();
+	public void validarCliente();
 
 }

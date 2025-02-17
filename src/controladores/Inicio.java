@@ -16,6 +16,7 @@ public class Inicio {
 		MenuEmpleadoInterfaz interfazEmpleado = new MenuEmpleadoImplementacion();
 		MenuClienteInterfaz interfazCliente = new MenuClienteImplementacion();
 		ClienteInterfaz clienteInterfaz = new ClienteImplementacion();
+		EmpleadoInterfaz empleadoInterfaz = new EmpleadoImplementacion();
 		
 		boolean esCerrado = false;
 		boolean esMenuEmpleadoCerrado = false;
@@ -44,6 +45,7 @@ public class Inicio {
 					switch (opcionMenuEmpleado) {
 					case 1: {
 						System.out.println("Ha entrado en la opción Validar Cliente");
+						empleadoInterfaz.validarCliente();
 						break;
 					}
 					
